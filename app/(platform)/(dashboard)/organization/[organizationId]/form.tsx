@@ -1,10 +1,10 @@
 'use client'
 
 import { createBoard } from '@/actions/create-board'
+import { FormInput } from '@/components/form/form-input'
+import { FormSubmit } from '@/components/form/form-submit'
 import { useAction } from '@/hooks/use-action'
-import { useFormState } from 'react-dom'
-import FormButton from './form-button'
-import FormInput from './form-input'
+
 createBoard
 
 export const Form = () => {
@@ -23,9 +23,9 @@ export const Form = () => {
   }
   return (
     <form action={onSubmit}>
-      <FormInput errors={fieldErrors} />
+      <FormInput label='Board Title' id='title' errors={fieldErrors} />
       <div className='flex flex-col space-y-2'></div>
-      <FormButton />
+      <FormSubmit>save</FormSubmit>
     </form>
   )
 }
