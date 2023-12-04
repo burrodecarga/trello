@@ -9,4 +9,7 @@ tiempo = {
   tiempo: 3.54,
   tiempo: 4.15,
   tiempo: 4.32,
+  tiempo: 4.51,
+  tiempo: 4.58,
+  tiempo: 5.04,
 }
