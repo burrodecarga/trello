@@ -2,7 +2,7 @@ import { XCircle } from 'lucide-react'
 
 interface FormErrorProps {
   id: string
-  errors: Record<string, string[] | undefined>
+  errors?: Record<string, string[] | undefined>
 }
 
 export const FormErrors = ({ id, errors }: FormErrorProps) => {

@@ -14,6 +14,6 @@ export const OrgControl = () => {
       organization: params.organizationId as string,
     })
   }, [setActive, params.organizationId])
-  console.log(params.organizationId)
+  //  console.log(params.organizationId)
   return null
 }

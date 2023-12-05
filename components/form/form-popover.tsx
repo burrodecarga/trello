@@ -13,8 +13,8 @@ import { FormSubmit } from './form-submit'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { Button } from '../ui/button'
 import { X } from 'lucide-react'
-import { create } from 'domain'
 import { toast } from 'sonner'
+import { FormPiker } from './form-picker'
 
 interface FormPopoverProps {
   children: React.ReactNode
@@ -31,7 +31,7 @@ export const FormPopover = ({
 }: FormPopoverProps) => {
   const { execute, fieldErrors } = useAction(createBoard, {
     onSuccess: (data) => {
-      console.log({ data })
+      //console.log({ data })
       toast.success('Board Created!')
     },
     onError: (error) => {
@@ -42,7 +42,9 @@ export const FormPopover = ({
 
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string
-    execute({ title })
+    const image = formData.get('image') as string
+    //console.log(image, title)
+    execute({ title, image })
   }
   return (
     <Popover>
@@ -66,6 +68,7 @@ export const FormPopover = ({
         </PopoverClose>
         <form action={onSubmit} className='space-y-4'>
           <div className='space-y-4'>
+            <FormPiker id='image' errors={fieldErrors} />
             <FormInput
               id='title'
               label='Board Title'
