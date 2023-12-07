@@ -1,4 +1,4 @@
-import { deleteBoard } from '@/actions/delete-board'
+import { deleteBoard } from '@/actions/update-board/index'
 import { Button } from '@/components/ui/button'
 import FormDelete from './form-delete'
 

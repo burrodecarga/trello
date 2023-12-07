@@ -1,6 +1,6 @@
 'use client'
 
-import { updateBoard } from '@/actions/update-board/index'
+import { updateBoard } from '@/actions/delete-board/index'
 import { FormInput } from '@/components/form/form-input'
 import { Button } from '@/components/ui/button'
 import { useAction } from '@/hooks/use-action'

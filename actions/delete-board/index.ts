@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { UpdateBoard } from './schema'
+import { DeleteBoard } from './schema'
 import { InputType, ReturnType } from './types'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -15,24 +15,23 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: 'Unathorized',
     }
   }
-  const { title, id } = data
+  const { id } = data
   let board
 
   try {
-    board = await db.board.update({
+    board = await db.board.delete({
       where: {
         id,
         orgId,
       },
-      data: { title },
     })
   } catch (error) {
     return {
-      error: 'failed to update',
+      error: 'failed to delete',
     }
   }
-  revalidatePath(`/board/${orgId}`)
+  revalidatePath(`/organization/${orgId}`)
   redirect(`/organization/${orgId}`)
 }
 
-export const updateBoard = createSafeAction(UpdateBoard, handler)
+export const deleteBoard = createSafeAction(DeleteBoard, handler)
