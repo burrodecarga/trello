@@ -39,7 +39,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   let board
 
   try {
-    console.log('EN EL TRY')
+    //console.log('EN EL TRY')
     board = await db.board.create({
       data: {
         title,

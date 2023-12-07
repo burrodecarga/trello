@@ -14,4 +14,8 @@ tiempo = {
   tiempo: 5.04,
   tiempo: 5.23,
   tiempo: 5.38,
+  tiempo: 5.51,
+  tiempo: 6.07,
+  tiempo: 6.15,
+  tiempo: 6.24,
 }
