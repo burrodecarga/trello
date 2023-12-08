@@ -20,4 +20,8 @@ tiempo = {
   tiempo: 6.24,
   tiempo: 6.33,
   tiempo: 6.41,
+  tiempo: 6.52,
+  tiempo: 7.0,
+  tiempo: 7.23,
+  tiempo: 7.36,
 }

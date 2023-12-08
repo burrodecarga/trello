@@ -1,6 +1,6 @@
 'use client'
 
-import { updateBoard } from '@/actions/delete-board/index'
+import { updateBoard } from '@/actions/update-board/index'
 import { FormInput } from '@/components/form/form-input'
 import { Button } from '@/components/ui/button'
 import { useAction } from '@/hooks/use-action'
@@ -65,7 +65,7 @@ export const BoardTitleForm = ({ data }: BoardTitleForm) => {
           id='title'
           onBlur={onBlur}
           defaultValue={title}
-          className='text-lg font-bold px-[7px] py-1 bg-transparent focus-visible:outline-none focus-visible:ring-transparent border-none h-7'
+          className='text-lg font-bold px-[7px] py-1 h-7 bg-transparent focus-visible:outline-none focus-visible:ring-transparent border-none'
         />
       </form>
     )
