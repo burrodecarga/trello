@@ -7,21 +7,12 @@ import { List } from '@prisma/client'
 import { ElementRef, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useEventListener } from 'usehooks-ts'
+import ListOptions from './list-options'
 
 interface ListHeaderProps {
   data: List
 }
 export const ListHeader = ({ data }: ListHeaderProps) => {
-  const { execute, fieldErrors } = useAction(updateList, {
-    onSuccess: (data) => {
-      toast.success(`Renamed to '${data.title}' `)
-      setTitle(data.title)
-      disableEditing()
-    },
-    onError: (error) => {
-      toast.error(error)
-    },
-  })
   const [title, setTitle] = useState(data.title)
   const [isEditing, setIsEditing] = useState(false)
   const formRef = useRef<ElementRef<'form'>>(null)
@@ -46,6 +37,17 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
   }
 
   useEventListener('keydown', onKeyDown)
+
+  const { execute } = useAction(updateList, {
+    onSuccess: (data) => {
+      toast.success(`Renamed to '${data.title}'`)
+      setTitle(data.title)
+      disableEditing()
+    },
+    onError: (error) => {
+      toast.error(error)
+    },
+  })
 
   const handlerSubmit = (formData: FormData) => {
     const title = formData.get('title') as string
@@ -89,6 +91,7 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
           {title}
         </div>
       )}
+      <ListOptions data={data} onAddCard={() => {}} />
     </div>
   )
 }
