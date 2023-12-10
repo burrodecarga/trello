@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react'
 import { ListForm } from './list-form'
 import { ListItem } from './list-item'
 import { DragDropContext, Droppable } from '@hello-pangea/dnd'
-import { list } from 'unsplash-js/dist/methods/photos/index'
-import { Provider } from '@radix-ui/react-tooltip'
-import { array } from 'zod'
+import { useAction } from '@/hooks/use-action'
+import { updateListOrder } from '@/actions/update-list-order/index'
+import { toast } from 'sonner'
+import { updateCardOrder } from '@/actions/update-card-order/index'
 
 interface ListContainerProps {
   data: ListWithCards[]
@@ -16,6 +17,20 @@ interface ListContainerProps {
 
 export const ListContainer = ({ data, boardId }: ListContainerProps) => {
   const [orderedData, setOrderedData] = useState(data)
+
+  const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
+    onSuccess: (data) => {
+      toast.success('List reordered')
+    },
+    onError: (error) => toast.error(error),
+  })
+
+  const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
+    onSuccess: (data) => {
+      toast.success('Card reordered')
+    },
+    onError: (error) => toast.error(error),
+  })
 
   function reorder<T>(list: T[], startIndex: number, endIndex: number) {
     const result = Array.from(list)
@@ -48,6 +63,7 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
       )
       setOrderedData(items)
       //TODO trigger server action
+      executeUpdateListOrder({ items, boardId })
     }
 
     //moviendo card
@@ -75,18 +91,23 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
 
       //moviendo en la misma lista
       if (source.droppableId === destination.droppableId) {
-        const reorderedCard = reorder(
+        const reorderedCards = reorder(
           sourceList.cards,
           source.index,
           destination.index,
         )
-        reorderedCard.map((card, index) => {
+        reorderedCards.map((card, index) => {
           card.order = index
         })
-        sourceList.cards = reorderedCard
+        sourceList.cards = reorderedCards
         setOrderedData(newOrderedData)
 
         //TODO trigger server action
+
+        executeUpdateCardOrder({
+          boardId: boardId,
+          items: reorderedCards,
+        })
         // moviendo card a otra lista
       } else {
         // remove card of the source list
@@ -107,6 +128,11 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         setOrderedData(newOrderedData)
 
         //TODO: Trigger server actions
+
+        executeUpdateCardOrder({
+          boardId: boardId,
+          items: destList.cards,
+        })
       }
     }
   }
