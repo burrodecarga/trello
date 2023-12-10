@@ -10,7 +10,7 @@ import { PathParamsContext } from 'next/dist/shared/lib/hooks-client-context.sha
 import { FormSubmit } from '@/components/form/form-submit'
 import { Button } from '@/components/ui/button'
 import { useAction } from '@/hooks/use-action'
-import { createList } from '@/actions/create-list/index'
+import { createList } from '@/actions/create-card/index'
 import { toast } from 'sonner'
 
 export const ListForm = () => {
