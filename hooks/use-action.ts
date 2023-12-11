@@ -1,33 +1,34 @@
-import { useState, useCallback } from 'react'
 import { ActionState, FieldErrors } from '@/lib/create-safe-actions'
+import { useState, useCallback } from 'react'
 
-type Action<TInput, TOuput> = (
+type Action<TInput, TOutput> = (
   data: TInput,
-) => Promise<ActionState<TInput, TOuput>>
+) => Promise<ActionState<TInput, TOutput>>
 
-interface UseActionOption<TOuput> {
-  onSuccess?: (data: TOuput) => void
+interface UseActionOptions<TOutput> {
+  onSuccess?: (data: TOutput) => void
   onError?: (error: string) => void
   onComplete?: () => void
 }
 
-export const useAction = <TInput, TOuput>(
-  action: Action<TInput, TOuput>,
-  options: UseActionOption<TInput> = {},
+export const useAction = <TInput, TOutput>(
+  action: Action<TInput, TOutput>,
+  options: UseActionOptions<TOutput> = {},
 ) => {
   const [fieldErrors, setFieldErrors] = useState<
     FieldErrors<TInput> | undefined
   >(undefined)
-
   const [error, setError] = useState<string | undefined>(undefined)
-  const [data, setData] = useState<TOuput | undefined>(undefined)
+  const [data, setData] = useState<TOutput | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const execute = useCallback(
     async (input: TInput) => {
       setIsLoading(true)
+
       try {
         const result = await action(input)
+
         if (!result) {
           return
         }
