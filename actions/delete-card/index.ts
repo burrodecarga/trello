@@ -4,7 +4,8 @@ import { createSafeAction } from '@/lib/create-safe-actions'
 import { db } from '@/lib/db'
 import { auth } from '@clerk/nextjs'
 import { revalidatePath } from 'next/cache'
-import { UpdateCard } from './schema'
+import { title } from 'process'
+import { DeleteCard } from './schema'
 import { InputType, ReturnType } from './types'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -14,11 +15,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: 'Unathorized',
     }
   }
-  const { id, boardId, ...values } = data
+  const { id, boardId } = data
   let card
 
   try {
-    card = await db.card.update({
+    card = await db.card.delete({
       where: {
         id,
         list: {
@@ -27,17 +28,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
           },
         },
       },
-      data: {
-        ...values,
-      },
     })
   } catch (error) {
     return {
-      error: 'failed to update',
+      error: 'failed to delete',
     }
   }
   revalidatePath(`/board/${boardId}`)
   return { data: card }
 }
 
-export const updateCard = createSafeAction(UpdateCard, handler)
+export const deleteCard = createSafeAction(DeleteCard, handler)

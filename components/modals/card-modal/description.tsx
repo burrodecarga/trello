@@ -1,4 +1,5 @@
 'use client'
+import { updateCard } from '@/actions/update-card/index'
 import { FormSubmit } from '@/components/form/form-submit'
 import { FormTextarea } from '@/components/form/form-textarea'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,7 @@ import { AlignLeft, X } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
 import React, { ElementRef, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { useEventListener, useOnClickOutside } from 'usehooks-ts'
 
 interface DescriptionProps {
@@ -23,8 +25,6 @@ export default function Description({ data }: DescriptionProps) {
   const formRef = useRef<ElementRef<'form'>>(null)
   const textareaRef = useRef<ElementRef<'textarea'>>(null)
 
-  // const { execute, fieldErrors } = useAction()
-
   const enableEditing = () => {
     setIsEditing(true)
     setTimeout(() => {
@@ -32,23 +32,45 @@ export default function Description({ data }: DescriptionProps) {
     })
   }
 
-  const disableDiting = () => {
+  const disableEditing = () => {
     setIsEditing(false)
   }
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-      disableDiting()
+      disableEditing()
     }
   }
 
   useEventListener('keydown', onKeyDown)
-  useOnClickOutside(formRef, disableDiting)
+  useOnClickOutside(formRef, disableEditing)
+
+  const { execute, fieldErrors } = useAction(updateCard, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['card', data.id],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['card-logs', data.id],
+      })
+      toast.success(`Card "${data.title}" updated`)
+      disableEditing()
+    },
+    onError: (error) => {
+      toast.error(error)
+    },
+  })
+
   const onSubmit = (formData: FormData) => {
-    const description = formData.get('descripion') as string
+    const description = formData.get('description') as string
+    console.log(description)
     const boardId = params.boardId as string
 
-    //TODO execute
+    execute({
+      id: data.id,
+      description,
+      boardId,
+    })
   }
 
   return (
@@ -57,16 +79,23 @@ export default function Description({ data }: DescriptionProps) {
       <div className='w-full'>
         <p className='font-semibold mb-2 text-neutral-700'>Description</p>
         {isEditing ? (
-          <form ref={formRef} className='space-y-2'>
+          <form action={onSubmit} ref={formRef} className='space-y-2'>
             <FormTextarea
-              id='drescription'
+              id='description'
               className='w-full mt-2'
-              placeholder='Add more detailed description'
+              placeholder='Add a more detailed description'
               defaultValue={data.description || undefined}
+              errors={fieldErrors}
+              ref={textareaRef}
             />
             <div className='flex items-center gap-x-2'>
               <FormSubmit>Save</FormSubmit>
-              <Button onClick={disableDiting} size='sm' variant={'destructive'}>
+              <Button
+                type='button'
+                onClick={disableEditing}
+                size='sm'
+                variant={'destructive'}
+              >
                 Cancel
               </Button>
             </div>

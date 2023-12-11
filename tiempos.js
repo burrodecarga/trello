@@ -34,4 +34,5 @@ tiempo = {
   tiempo: 9.08,
   tiempo: 9.17,
   tiempo: 9.29,
+  tiempo: 9.54,
 }

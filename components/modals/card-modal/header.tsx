@@ -24,7 +24,7 @@ export const Header = ({ data }: HeaderProps) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['card', data.id] })
       toast.success(`Renamed to '${data.title}'`)
-      setTitle(data.title)
+      setTitle(data.title!)
     },
     onError: (error) => toast.error(error),
   })
@@ -56,6 +56,9 @@ export const Header = ({ data }: HeaderProps) => {
             className='font-semibold text-neutral-600 text-xl px-1 bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:bg-white focus-visible:border-input mb-0.5 truncate'
           />
         </form>
+        <p className='text-sm text-muted-foreground'>
+          in list <span className='underline'>{data.list.title}</span>
+        </p>
       </div>
     </div>
   )
