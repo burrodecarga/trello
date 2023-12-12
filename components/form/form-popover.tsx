@@ -16,6 +16,7 @@ import { X } from 'lucide-react'
 import { toast } from 'sonner'
 import { FormPiker } from './form-picker'
 import { useRouter } from '@/node_modules/next/navigation'
+import { useProdModal } from '@/hooks/use-pro-modal'
 
 interface FormPopoverProps {
   children: React.ReactNode
@@ -30,6 +31,7 @@ export const FormPopover = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
+  const proModal = useProdModal()
   const router = useRouter()
   const closeRef = useRef<ElementRef<'button'>>(null)
   const { execute, fieldErrors } = useAction(createBoard, {
@@ -40,8 +42,8 @@ export const FormPopover = ({
       router.push(`/board/${data.id}`)
     },
     onError: (error) => {
-      console.log({ error })
       toast.error(error)
+      proModal.onOpen()
     },
   })
 

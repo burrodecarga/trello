@@ -3,6 +3,7 @@
 import { createAuditLog } from '@/lib/create-audit-log'
 import { createSafeAction } from '@/lib/create-safe-actions'
 import { db } from '@/lib/db'
+import { incrementAvailableCount, hasAvailableCount } from '@/lib/org-limit'
 import { auth } from '@clerk/nextjs'
 import { ACTION, ENTITY_TYPE } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -14,6 +15,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   if (!userId || !orgId) {
     return {
       error: 'Unauthorize',
+    }
+  }
+
+  const canCreate = await hasAvailableCount()
+
+  if (!canCreate) {
+    return {
+      error:
+        'you have reached your limit of free board. please upgrade to crete more...',
     }
   }
 
@@ -31,17 +41,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     return { error: 'missing field. error to create Board' }
   }
 
-  // console.log({
-  //   imageId,
-  //   imageThumbUrl,
-  //   imageFullUrl,
-  //   imageLinkHTML,
-  //   imageUserName,
-  // })
   let board
 
   try {
-    //console.log('EN EL TRY')
     board = await db.board.create({
       data: {
         title,
@@ -54,6 +56,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     })
 
+    await incrementAvailableCount()
+
     await createAuditLog({
       entityTitle: board.title,
       entityId: board.id,
@@ -62,7 +66,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     })
   } catch (error) {
     return {
-      error: 'BDC  Failed to create',
+      error: 'Failed to create audit log',
     }
   }
 

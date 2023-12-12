@@ -5,7 +5,7 @@ import { ListWithCards } from '@/types'
 import { Droppable, Draggable } from '@hello-pangea/dnd'
 import { ElementRef, useRef, useState } from 'react'
 import { CardForm } from './card-form'
-import { CardItem } from './card-item/card-item'
+import { CardItem } from './card-item'
 import { ListHeader } from './list-header'
 
 interface ListItemProps {
