@@ -38,7 +38,7 @@ export const FormPiker = ({ id, errors }: FormPickerProps) => {
           console.log('FAILED TO GET IMAGES FROM UNSPLASH')
         }
       } catch (error) {
-        console.log(error)
+        //console.log(error)
         setImages(defaultImages)
       } finally {
         setIsloading(false)

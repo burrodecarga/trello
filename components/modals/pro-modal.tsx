@@ -15,9 +15,15 @@ export const ProModal = () => {
 
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
-      <DialogContent className='max-w-md p-0 overflow-hidden'>
+      <DialogContent className='max-w-md p-10 overflow-hidden mx-auto mx-auto mt-12 border-neutral-300'>
         <div className='aspect-video relative flex items-center justify-center'>
-          <Image src='/hero.svg' alt='Hero' className='object-cover' fill />
+          <Image
+            src='/hero.svg'
+            alt='Hero'
+            className='object-cover'
+            sizes='100vw'
+            fill
+          />
         </div>
 
         <div className='text-neutral-700 mx-auto space-y-6 p-6'>
